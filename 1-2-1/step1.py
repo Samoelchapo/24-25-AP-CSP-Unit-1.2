@@ -1,137 +1,109 @@
-##############################################################################
-#   a121_TR_catch_a_turtle_complete.py
-#   Example solution:
-#      A game where a turtle appears at random locations on the screen and
-#      a player raises their score by clicking the turtles in time.
-#      Complete with all the challenges.
-##############################################################################
-# -----import statements-----
+# a121_catch_a_turtle.py
+#-----import statements-----
 import turtle as trtl
 import random as rand
-import leaderboard as lb
 
-# -----game configuration-----
-# To view in trinket change the values of font_size, spot_size, and
-# screen_size by half
-colors = ["black", "sky blue", "salmon", "orchid", "pale green"]
-font_setup = ("Arial", 20, "normal")
-spot_size = 2
-spot_color = 'pink'
-spot_shape = "turtle"
-timer = 30
-counter_interval = 1000
-timer_up = False
-score = 0
-leaderboard_file_name= "a122_leaderboard.txt"
-player_name = input("Enter player name: ")
-# -----initialize the turtles-----
-spot = trtl.Turtle()
+
+from random import randint
+font_setup= ("Arial", 20, "normal")
+clicks = 1
+score=0
+timer=30
+counter_interval=10000
+timer_up= False
+
+#-----game configuration----
+spot_color= "gold"
+spot_size = 5
+spot_shape= "circle"
+spot_movement="left"
+#-----initialize turtle-----0
+spot= trtl.Turtle()
 spot.shape(spot_shape)
 spot.shapesize(spot_size)
-spot.fillcolor(spot_color)
+spot.color(spot_color)
+spot.speed("fastest")
 
-score_writer = trtl.Turtle()
+score_writer= trtl.Turtle()
 score_writer.hideturtle()
-score_writer.penup()
-score_writer.goto(160, 160)  # x,y set to fit on smaller screen
-score_writer.pendown()
-# score_writer.showturtle()
+score_writer.speed("fastest")
 
-counter = trtl.Turtle()
-counter.hideturtle()
-counter.penup()
-counter.goto(-160, 160)  # x,y set to fit on smaller screen
-counter.pendown()
+score_box=trtl.Turtle()
+score_box.hideturtle()
 
+counter=trtl.Turtle()
 
-# counter.showturtle()
-
-# -----game functions-----
-
-# countdown function
-def countdown():
-    global timer, timer_up
-    counter.clear()
-    if timer <= 0:
-        counter.write("Time's Up", font=font_setup)
-        timer_up = True
-    else:
-        counter.write("Timer: " + str(timer), font=font_setup)
-        timer -= 1
-        counter.getscreen().ontimer(countdown, counter_interval)
-
-    # update and display the score
-
-
+#-----game functions--------
+spot.penup()
+def change_position():
+    X_position = rand.randint(-400,400)
+    Y_position = rand.randint(-300,300)
+    spot.goto(X_position,Y_position)
+def spot_clicked(x,y):
+       change_position()
+       update_score()
 def update_score():
     global score
-    score = score + 1
     score_writer.clear()
-    score_writer.write(score, font=font_setup)
+    score += 1
+    score_writer.write(score,font=font_setup)
+    score_writer.penup()
+    score_writer.goto(-430,330)
+    score_writer.pendown()
+
+def countdown():
+    # -----import statements-----
+    import turtle as trtl
+
+    # -----countdown variables-----
+    font_setup = ("Arial", 20, "normal")
+    timer = 30
+    counter_interval = 1000  # 1000 represents 1 second
+    timer_up = False
+
+    # -----countdown writer-----
+    counter = trtl.Turtle()
+    counter.speed("fastest")
+    # -----game functions-----
+    counter.penup()
+    counter.goto(-100, 330)
+    counter.pendown()
+
+    def countdown():
+        global timer, timer_up
+        counter.clear()
+        if timer <= 0:
+            counter.write("Time's Up", font=font_setup)
+            timer_up = True
+        else:
+            counter.write("Timer: " + str(timer), font=font_setup)
+            timer -= 1
+            counter.getscreen().ontimer(countdown, counter_interval)
+
+            # ---------events---------
+
+    wn = trtl.Screen()
+    wn.ontimer(countdown, counter_interval)
+    wn.mainloop()
+counter.penup()
+counter.goto(250,300)
+counter.pendown()
+
+score_box.speed("fastest")
+score_box.penup()
+score_box.goto(-400,330)
+score_box.pendown()
+score_box.goto(-370,330)
+score_box.goto(-370,370)
+score_box.goto(-440,370)
+score_box.goto(-440,330)
+score_box.goto(-400,330)
 
 
-# what happens when the spot is clicked
-def spot_clicked(x, y):
-    global timer_up
-    if (not timer_up):
-        update_score()
-        change_position()
-    else:
-        spot.hideturtle()
 
 
-# resize the turtle
-def resize():
-    sizes = [.5, 1, 1.5, 2]
-    spot.shapesize(rand.choice(sizes))
-
-
-# stamp turtle
-def leave_a_mark():
-    spot.fillcolor(rand.choice(colors[1:]))
-    spot.stamp()
-    spot.fillcolor(colors[0])  # comment out for more a more difficult game
-
-
-# change the position of spot
-def change_position():
-    leave_a_mark()  # challenge to add color
-    resize()  # challenge to change size of turtle
-    new_xpos = rand.randint(-150, 150)  # x,y set to fit on smaller screen
-    new_ypos = rand.randint(-150, 150)  # x,y set to fit on smaller screen
-    spot.penup()  # 2nd step in moving
-    spot.hideturtle()  # 3rd step in moving
-    spot.goto(new_xpos, new_ypos)  # 1st step in moving
-    spot.showturtle()
-    spot.pendown()
-
-
-# starting the game
-def start_game():
-    spot.onclick(spot_clicked)
-    counter.getscreen().ontimer(countdown, counter_interval)
-
-# Add this function to your game code
-
-# manages the leaderboard for top 5 scorers
-def manage_leaderboard():
-
-  global score
-  global spot
-
-  # get the names and scores from the leaderboard file
-  leader_names_list = lb.get_names(leaderboard_file_name)
-  leader_scores_list = lb.get_scores(leaderboard_file_name)
-
-  # show the leaderboard with or without the current player
-  if (len(leader_scores_list) < 5 or score >= leader_scores_list[4]):
-    lb.update_leaderboard(leaderboard_file_name, leader_names_list, leader_scores_list, player_name, score)
-    lb.draw_leaderboard(True, leader_names_list, leader_scores_list, spot, score)
-
-  else:
-    lb.draw_leaderboard(False, leader_names_list, leader_scores_list, spot, score)
-# ----------events----------
-start_game()
-wn = trtl.Screen()
-wn.bgcolor("white smoke")
+#-----events----------------
+spot.onclick(spot_clicked)
+wn= trtl.Screen()
+wn.ontimer(countdown,counter_interval)
 wn.mainloop()
