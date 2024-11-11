@@ -13,6 +13,7 @@ import leaderboard as lb
 # -----game configuration-----
 # To view in trinket change the values of font_size, spot_size, and
 # screen_size by half
+
 colors = ["black", "sky blue", "salmon", "orchid", "pale green"]
 font_setup = ("Arial", 20, "normal")
 spot_size = 2
@@ -22,8 +23,8 @@ timer = 5
 counter_interval = 1000
 timer_up = False
 score = 0
-leaderboard_file_name= "a122_leaderboard.txt"
-player_name = input("Enter player name: ")
+leaderboard_file_name = "a122_leaderboard.txt"
+player_name = input ("Please enter your name:")
 # -----initialize the turtles-----
 spot = trtl.Turtle()
 spot.shape(spot_shape)
@@ -115,6 +116,9 @@ def start_game():
 # Add this function to your game code
 
 # manages the leaderboard for top 5 scorers
+# Add this function to your game code
+
+# manages the leaderboard for top 5 scorers
 def manage_leaderboard():
 
   global score
@@ -128,7 +132,10 @@ def manage_leaderboard():
   if (len(leader_scores_list) < 5 or score >= leader_scores_list[4]):
     lb.update_leaderboard(leaderboard_file_name, leader_names_list, leader_scores_list, player_name, score)
     lb.draw_leaderboard(True, leader_names_list, leader_scores_list, spot, score)
-
+    if timer <= 0:
+        counter.write("Time's Up", font=font_setup)
+        timer_up = True
+        manage_leaderboard()
   else:
     lb.draw_leaderboard(False, leader_names_list, leader_scores_list, spot, score)
 # ----------events----------
