@@ -3,14 +3,12 @@ import turtle as trtl
 
 #-----setup-----
 apple_image = "apple.gif" # Store the file name of your shape
-pear_image = "pear.gif"
+
 wn = trtl.Screen()
 wn.setup(width=1.0, height=1.0)
-wn.addshape(apple_image)
-wn.addshape(pear_image)# Make the screen aware of the new file
-wn.bgpic('background.gif')
+wn.addshape(apple_image) # Make the screen aware of the new file
+wn.bgpic("background.gif")
 apple = trtl.Turtle()
-pear= trtl.Turtle()
 
 #-----functions-----
 # given a turtle, set that turtle to be shaped by the image file
@@ -18,29 +16,15 @@ def draw_apple(active_apple):
   active_apple.shape(apple_image)
   wn.update()
 
-def draw_pear(active_pear):
-  pear.penup()
-  pear.goto(100,0)
-  pear.pendown()
-  active_pear.shape(pear_image)
-  wn.update()
-
-def apple_down(active_apple):
-  active_apple.shape('apple.gif')
-  wn.setup(width=1.0, height=1.0)
-  wn.onkeypress(, "a")
-  apple.goto(0,-100)
-
-
-
+def drop_apple(active_apple):
+  apple.penup()
+  x_coor = active_apple.xcor()
+  y_coor = active_apple.ycor()
+  active_apple.goto(x_coor, y_coor - 300)
+  apple.pendown()
 
 #-----function calls-----
 draw_apple(apple)
-draw_pear(pear)
-apple_down(apple)
-
+drop_apple(apple)
 
 wn.mainloop()
-wn.listen()
-
-wn.update()
