@@ -50,7 +50,12 @@ for wall in range(21):
 
 # randomize location of doors and barriers in wall
 
-
+#Pong_ball
+def draw_pong(active_pong):
+    active_pong.shape(pong_ball)
+    active_pong.showturtle()
+    wn.addshape(pong_ball)
+    wn.update()
 
 
 
