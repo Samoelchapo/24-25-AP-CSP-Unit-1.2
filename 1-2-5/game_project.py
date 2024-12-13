@@ -1,95 +1,137 @@
 import turtle
-import turtle as trtl
+import random
 
+wn = turtle.Screen()
+wn.setup(width=800, height=600)
+wn.bgcolor("lightblue")
+wn.tracer(0)
 
-wn = trtl.Screen()
-wn.bgcolor('lightblue')
+# drawScore
+pen = turtle.Turtle()
+pen.speed(0)
+pen.color("white")
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 270)
+pen.write("Player 1: 0      Player 2: 0", align="center", font=("Courier", 24, "normal"))
+
+# Score
+score_1 = 0
+score_2 = 0
+
+# leftpaddle
+leftpaddle = turtle.Turtle()
+leftpaddle.speed(0)
+leftpaddle.shape("square")
+leftpaddle.color("white")
+leftpaddle.shapesize(stretch_wid=5, stretch_len=1)
+leftpaddle.penup()
+leftpaddle.goto(-370, 0)
+
+# rightpaddle
+rightpaddle = turtle.Turtle()
+rightpaddle.speed(0)
+rightpaddle.shape("square")
+rightpaddle.color("white")
+rightpaddle.shapesize(stretch_wid=5, stretch_len=1)
+rightpaddle.penup()
+rightpaddle.goto(370, 0)
+
+# ball
 ball = turtle.Turtle()
-#player list
-Player1_score=0
-Player2_score=0
-score = turtle.Turtle()
-score.hideturtle()
-score.speed(0)
-game_over = False
-winner = None
+ball.speed(0)
+ball.shape("circle")
+ball.color("white")
+ball.penup()
+ball.goto(0, 0)
+ball.dx = 0.2
+ball.dy = 0.2
 
 
-score.color("black")
-score.penup()
-score.goto(-250, 300)
-score.write("Player 1 score : 0   Player 2 score: 0",
-            font=("arial", 24, "normal"))
+# movement
+def paddle_1_up():
+    y = leftpaddle.ycor()
+    y += 25
+    leftpaddle.sety(y)
 
 
+def paddle_1_down():
+    y = leftpaddle.ycor()
+    y -= 25
+    leftpaddle.sety(y)
 
 
+def paddle_2_up():
+    y = rightpaddle.ycor()
+    y += 25
+    rightpaddle.sety(y)
 
 
-def leftstick():
-    leftpaddle = trtl.Turtle()
-    leftpaddle.speed(0)
-    leftpaddle.penup()
-    leftpaddle.goto(-400,0)
-    leftpaddle.shape("square")
-    leftpaddle.color("white")
-    leftpaddle.shapesize(stretch_wid=5,stretch_len=1)
+def paddle_2_down():
+    y = rightpaddle.ycor()
+    y -= 25
+    rightpaddle.sety(y)
 
 
-leftstick()
-
-def rightstick():
-    rightpaddle = trtl.Turtle()
-    rightpaddle.speed(0)
-    rightpaddle.penup()
-    rightpaddle.goto(400,0)
-    rightpaddle.shape("square")
-    rightpaddle.color("white")
-    rightpaddle.shapesize(stretch_wid=5,stretch_len=1)
-
-rightstick()
-
-
-
-# Update score display
-
-
-def leftstick_up():
-    leftstick.
-def leftstick_down():
-    if wn.onkeypress(leftstick, "s"):
-        leftstick.down = -10
-def rightstick_up():
-    if wn.onkeypress(rightstick, "Up"):
-        rightstick.up = 10
-
-def rightstick_down():
-    if wn.onkeypress(rightstick, "Down"):
-        rightstick.down = -10
-
-# Set up keyboard bindings
+# key inputs
 wn.listen()
-wn.onkeypress(leftstick_up, "w")
-wn.onkeypress(leftstick_down, "s")
-wn.onkeypress(rightstick_up, "Up")
-wn.onkeypress(rightstick_down, "Down")
+wn.onkeypress(paddle_1_up, "w")
+wn.onkeypress(paddle_1_down, "s")
+wn.onkeypress(paddle_2_up, "Up")
+wn.onkeypress(paddle_2_down, "Down")
+
+# mainloop
+while True:
+    wn.update()
+    # game over
+    if score_1 == 20:
+        pen.clear()
+        ball.dx = 0
+        ball.dy = 0
+        ball.goto(0, 0)
+        pen.write("Player 1 wins", align="center", font=("arial", 32, "normal"))
+
+        if score_2 == 20:
+            pen.clear()
+        ball.dx = 0
+        ball.dy = 0
+        ball.goto(0, 0)
+        pen.write("Player 2 wins", align="center", font=("arial", 32, "normal"))
+
+    # ball movement
+    ball.setx(ball.xcor() + ball.dx)
+    ball.sety(ball.ycor() + ball.dy)
 
 
+# walls
+    if ball.ycor() > 290:
+        ball.sety(290)
+        ball.dy *= -1
 
+    if ball.ycor() < -290:
+        ball.sety(-290)
+        ball.dy *= -1
 
+    if ball.xcor() > 390:
+        ball.goto(0,0)
+        ball.dx *= -1
+        score_1 += 1
+        pen.clear()
+        pen.write("Player 1: {}   Player 2: {}".format(score_1, score_2), align="center", font=("Courier", 24, "normal"))
 
+    if ball.xcor() < -390:
+        ball.goto( 0,0)
+        ball.dx *= -1
+        score_2 += 1
+        pen.clear()
+        pen.write("Player 1: {}   Player 2: {}".format(score_1, score_2), align="center", font=("Courier", 24, "normal"))
 
+# collision
+    if 340 < ball.xcor() < 350 and (rightpaddle.ycor() + 40 > ball.ycor() > rightpaddle.ycor() - 40):
+        ball.setx(340)
+        ball.dx *= -1
 
+    if -340 > ball.xcor() > -350 and(leftpaddle.ycor() + 40 > ball.ycor() > leftpaddle.ycor() - 40):
+        ball.setx(-340)
+        ball.dx *= -1
 
-
-ball.shape("circle")
-ball.color("white")
-ball.goto(0,0)
-ball.shape("circle")
-ball.color("white")
-ball.shapesize(stretch_wid=1,stretch_len=1)
-
-
-
-
-wn.mainloop()
