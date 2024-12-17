@@ -51,25 +51,25 @@ ball.dy = 0.2
 # movement
 def paddle_1_up():
     y = leftpaddle.ycor()
-    y += 25
+    y += 30
     leftpaddle.sety(y)
 
 
 def paddle_1_down():
     y = leftpaddle.ycor()
-    y -= 25
+    y -= 30
     leftpaddle.sety(y)
 
 
 def paddle_2_up():
     y = rightpaddle.ycor()
-    y += 25
+    y += 30
     rightpaddle.sety(y)
 
 
 def paddle_2_down():
     y = rightpaddle.ycor()
-    y -= 25
+    y -= 30
     rightpaddle.sety(y)
 
 
